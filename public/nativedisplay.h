@@ -309,13 +309,7 @@ class NativeDisplay {
    * layer ids. The argument to the method is the
    * initial size of the pool
    */
-  virtual int InitializeLayerHashGenerator(int size) {
-    LayerIds_.clear();
-    for (int i = 0; i < size; i++) {
-      LayerIds_.push_back(i);
-    }
-
-    current_max_layer_ids_ = size;
+  virtual int InitializeLayerHashGenerator(int) {
     return 0;
   }
 
@@ -324,27 +318,19 @@ class NativeDisplay {
    * unused id for the layer.
    */
   virtual uint64_t AcquireId() {
-    if (LayerIds_.empty())
-      return ++current_max_layer_ids_;
-
-    uint64_t id = LayerIds_.back();
-    LayerIds_.pop_back();
-
-    return id;
+    return 0;
   }
 
   /**
    * Method to return a destroyed layer's id back into the pool
    */
-  virtual void ReleaseId(uint64_t id) {
-    LayerIds_.push_back(id);
+  virtual void ReleaseId(uint64_t) {
   }
 
   /**
    * Call this to reset the id pool back to its initial state.
    */
   virtual void ResetLayerHashGenerator() {
-    InitializeLayerHashGenerator(current_max_layer_ids_);
   }
 
   /**
@@ -381,11 +367,6 @@ class NativeDisplay {
   // to individual layers shown by this display.
   virtual void RotateDisplay(HWCRotation /*rotation*/) {
   }
-
-private:
-  std::vector<uint64_t> LayerIds_;
-  uint64_t current_max_layer_ids_;
-
 };
 
 /**
